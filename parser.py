@@ -2,64 +2,166 @@
 M = {
     # Inicial
     "S": {
-        "T_FUNCDEF": "S → funcdef S",
-        "$": "S → ε",
+        "$": "S ::= MAIN $",
     },
-    # Função
-    "funcdef": {
-        "T_FUNCDEF": "funcdef → T_FUNCDEF T_IDENT T_OPEN_PAREN parlist T_CLOSE_PAREN T_OPEN_BRACE stmtlist T_CLOSE_BRACE",
+    # Main
+    "MAIN": {
+        "$": "MAIN ::= ε",
+        "def": "MAIN ::= FLIST",
+        "id": "MAIN ::= STMT",
+        "int": "MAIN ::= STMT",
+        "{": "MAIN ::= STMT",
+        ";": "MAIN ::= STMT",
+        "print": "MAIN ::= STMT",
+        "return": "MAIN ::= STMT",
+        "if": "MAIN ::= STMT",
     },
-    # Parâmetros
-    "parlist": {
-        "T_INT": "parlist → T_INT T_IDENT parlist_tail",
-        "T_CLOSE_PAREN": "parlist → ε",
+    # Lista de Funções
+    "FLIST": {
+        "def": "FLIST ::= FDEF FLIST'",
     },
-    "parlist_tail": {
-        "T_COMMA": "parlist_tail → T_COMMA T_INT T_IDENT parlist_tail",
-        "T_CLOSE_PAREN": "parlist_tail → ε",
+    "FLIST'": {
+        "$": "FLIST' ::= ε",
+        "def": "FLIST' ::= FLIST",
+    },
+    # Definição de Função
+    "FDEF": {
+        "def": "FDEF ::= def id ( PARLIST ) { STMTLIST }",
+    },
+    # Lista de Parâmetros
+    "PARLIST": {
+        ")": "PARLIST ::= ε",
+        "int": "PARLIST ::= int id PARLIST'",
+    },
+    "PARLIST'": {
+        ")": "PARLIST' ::= ε",
+        ",": "PARLIST' ::= , PARLIST",
+    },
+    # Lista de Variáveis
+    "VARLIST": {
+        "id": "VARLIST ::= id VARLIST'",
+    },
+    "VARLIST'": {
+        ",": "VARLIST' ::= , VARLIST",
+        ";": "VARLIST' ::= ε",
     },
     # Declarações
-    "stmtlist": {
-        "T_INT": "stmtlist → stmt stmtlist",
-        "T_RETURN": "stmtlist → stmt stmtlist",
-        "T_IDENT": "stmtlist → stmt stmtlist",
-        "T_PRINT": "stmtlist → stmt stmtlist",
-        "T_CLOSE_BRACE": "stmtlist → ε",
+    "STMT": {
+        "id": "STMT ::= ATRIBST ;",
+        "{": "STMT ::= { STMTLIST }",
+        "int": "STMT ::= int VARLIST ;",
+        ";": "STMT ::= ;",
+        "print": "STMT ::= PRINTST ;",
+        "return": "STMT ::= RETURNST ;",
+        "if": "STMT ::= IFSTMT",
     },
-    "stmt": {
-        "T_INT": "stmt → T_INT T_IDENT T_SEMICOLON",
-        "T_IDENT": "stmt → T_IDENT T_EQUALS_SIGN expr T_SEMICOLON",
-        "T_PRINT": "stmt → T_PRINT expr T_SEMICOLON",
-        "T_RETURN": "stmt → T_RETURN expr T_SEMICOLON",
+    # Atribuições
+    "ATRIBST": {
+        "id": "ATRIBST ::= id := ATRIBST'",
+    },
+    "ATRIBST'": {
+        "id": "ATRIBST' ::= id AATRIBST'",
+        "(": "ATRIBST' ::= ( NUMEXPR ) TERM' NUMEXPR' EXPR'",
+        "num": "ATRIBST' ::= num TERM' NUMEXPR' EXPR'",
+    },
+    "AATRIBST'": {
+        "(": "AATRIBST' ::= ( PARLISTCALL )",
+        "id": "AATRIBST' ::= TERM' NUMEXPR' EXPR'",
+        "num": "AATRIBST' ::= TERM' NUMEXPR' EXPR'",
+    },
+    # Chamadas de Função
+    "FCALL": {
+        "id": "FCALL ::= id ( PARLISTCALL )",
+    },
+    "PARLISTCALL": {
+        "id": "PARLISTCALL ::= id PARLISTCALL'",
+        ")": "PARLISTCALL ::= ε",
+    },
+    "PARLISTCALL'": {
+        ")": "PARLISTCALL' ::= ε",
+        ",": "PARLISTCALL' ::= , PARLISTCALL",
+    },
+    # Impressão
+    "PRINTST": {
+        "print": "PRINTST ::= print EXPR",
+    },
+    # Retorno
+    "RETURNST": {
+        "return": "RETURNST ::= return RETURNST'",
+    },
+    "RETURNST'": {
+        "id": "RETURNST' ::= id",
+        ";": "RETURNST' ::= ε",
+    },
+    # Condicional
+    "IFSTMT": {
+        "if": "IFSTMT ::= if ( EXPR ) STMT IFSTMT''",
+    },
+    "IFSTMT'": {
+        "else": "IFSTMT' ::= else STMT",
+    },
+    # Lista de Declarações
+    "STMTLIST": {
+        "id": "STMTLIST ::= STMT STMTLIST'",
+        "{": "STMTLIST ::= STMT STMTLIST'",
+        "int": "STMTLIST ::= STMT STMTLIST'",
+        ";": "STMTLIST ::= STMT STMTLIST'",
+        "print": "STMTLIST ::= STMT STMTLIST'",
+        "return": "STMTLIST ::= STMT STMTLIST'",
+        "if": "STMTLIST ::= STMT STMTLIST'",
+    },
+    "STMTLIST'": {
+        "id": "STMTLIST' ::= STMT STMTLIST'",
+        "{": "STMTLIST' ::= STMT STMTLIST'",
+        "int": "STMTLIST' ::= STMT STMTLIST'",
+        ";": "STMTLIST' ::= STMT STMTLIST'",
+        "print": "STMTLIST' ::= STMT STMTLIST'",
+        "return": "STMTLIST' ::= STMT STMTLIST'",
+        "if": "STMTLIST' ::= STMT STMTLIST'",
+        "}": "STMTLIST' ::= ε",
     },
     # Expressões
-    "expr": {
-        "T_IDENT": "expr → T_IDENT expr_tail",
-        "INT_LITERAL": "expr → term expr_tail",
+    "EXPR": {
+        "id": "EXPR ::= NUMEXPR EXPR'",
+        "num": "EXPR ::= NUMEXPR EXPR'",
     },
-    "expr_tail": {
-        "T_PLUS_SIGN": "expr_tail → T_PLUS_SIGN term expr_tail",
-        "T_MINUS_SIGN": "expr_tail → T_MINUS_SIGN term expr_tail",
-        "T_SEMICOLON": "expr_tail → ε",
+    "EXPR'": {
+        ";": "EXPR' ::= ε",
+        "<": "EXPR' ::= < NUMEXPR",
+        "<=": "EXPR' ::= <= NUMEXPR",
+        ">": "EXPR' ::= > NUMEXPR",
+        ">=": "EXPR' ::= >= NUMEXPR",
+        "==": "EXPR' ::= == NUMEXPR",
+        "<>": "EXPR' ::= <> NUMEXPR",
     },
-    # Termos e fatores
-    "term": {
-        "T_IDENT": "term → factor term_tail",
-        "INT_LITERAL": "term → factor term_tail",
+    # Expressões Numéricas
+    "NUMEXPR": {
+        "id": "NUMEXPR ::= TERM NUMEXPR'",
+        "num": "NUMEXPR ::= TERM NUMEXPR'",
     },
-    "term_tail": {
-        "T_ASTERISK_SIGN": "term_tail → T_ASTERISK_SIGN factor term_tail",
-        "T_SLASH_SIGN": "term_tail → T_SLASH_SIGN factor term_tail",
-        "T_PLUS_SIGN": "term_tail → ε",
-        "T_MINUS_SIGN": "term_tail → ε",
-        "T_SEMICOLON": "term_tail → ε",
+    "NUMEXPR'": {
+        ";": "NUMEXPR' ::= ε",
+        "+": "NUMEXPR' ::= + TERM NUMEXPR'",
+        "-": "NUMEXPR' ::= - TERM NUMEXPR'",
     },
-    "factor": {
-        "T_IDENT": "factor → T_IDENT",
-        "INT_LITERAL": "factor → INT_LITERAL",
+    # Termos
+    "TERM": {
+        "id": "TERM ::= FACTOR TERM'",
+        "num": "TERM ::= FACTOR TERM'",
+    },
+    "TERM'": {
+        ";": "TERM' ::= ε",
+        "+": "TERM' ::= ε",
+        "-": "TERM' ::= ε",
+        "*": "TERM' ::= * FACTOR TERM'",
+        "/": "TERM' ::= / FACTOR TERM'",
+    },
+    # Fatores
+    "FACTOR": {
+        "id": "FACTOR ::= id",
+        "num": "FACTOR ::= num",
     },
 }
-
 # Algoritmo de Parsing
 # current_token = a // top = X
 def predictive_parser(tokens, table, start_symbol):
@@ -104,18 +206,8 @@ def predictive_parser(tokens, table, start_symbol):
 
 # Exemplo de tokens de entrada
 tokens = [
-    "T_FUNCDEF", "T_IDENT", "T_OPEN_PAREN", "T_INT", "T_IDENT", "T_COMMA", "T_INT", "T_IDENT", "T_CLOSE_PAREN",
-    "T_OPEN_BRACE", "T_INT", "T_IDENT", "T_COMMA", "T_IDENT", "T_SEMICOLON",
-    "T_IDENT", "T_EQUALS_SIGN", "T_IDENT", "T_PLUS_SIGN", "T_IDENT", "T_SEMICOLON",
-    "T_IDENT", "T_EQUALS_SIGN", "T_IDENT", "T_PLUS_SIGN", "T_IDENT", "T_ASTERISK_SIGN", "T_IDENT", "T_SEMICOLON",
-    "T_RETURN", "T_IDENT", "T_SEMICOLON", "T_CLOSE_BRACE",
-    "T_FUNCDEF", "T_IDENT", "T_OPEN_PAREN", "T_CLOSE_PAREN",
-    "T_OPEN_BRACE", "T_INT", "T_IDENT", "T_COMMA", "T_IDENT", "T_COMMA", "T_IDENT", "T_SEMICOLON",
-    "T_IDENT", "T_EQUALS_SIGN", "INT_LITERAL", "T_SEMICOLON",
-    "T_IDENT", "T_EQUALS_SIGN", "INT_LITERAL", "T_SEMICOLON",
-    "T_IDENT", "T_EQUALS_SIGN", "T_IDENT", "T_OPEN_PAREN", "T_IDENT", "T_COMMA", "T_IDENT", "T_CLOSE_PAREN", "T_SEMICOLON",
-    "T_PRINT", "T_IDENT", "T_SEMICOLON",
-    "T_RETURN", "T_SEMICOLON", "T_CLOSE_BRACE", "$"
+    "T_IDENT", "T_OPEN_PAREN", "T_CLOSE_PAREN",
+    "T_OPEN_BRACE", "T_RETURN", "T_SEMICOLON", "T_CLOSE_BRACE", "$"
 ]
 
 # Executa o analisador
