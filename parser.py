@@ -1,68 +1,172 @@
+import os
+
+import lexer_parte_b as lexer
+
 # Exemplo de tabela de análise sintática (simplificada para referência)
 M = {
-    # Inicial
     "S": {
-        "T_FUNCDEF": "S → funcdef S",
-        "$": "S → ε",
+        "$": ["MAIN", "$"],
+        "def": ["MAIN", "$"],
+        "id": ["MAIN", "$"],
+        "{": ["MAIN", "$"],
+        "int": ["MAIN", "$"],
+        ";": ["MAIN", "$"],
+        "print": ["MAIN", "$"],
+        "return": ["MAIN", "$"],
+        "if": ["MAIN", "$"],
     },
-    # Função
-    "funcdef": {
-        "T_FUNCDEF": "funcdef → T_FUNCDEF T_IDENT T_OPEN_PAREN parlist T_CLOSE_PAREN T_OPEN_BRACE stmtlist T_CLOSE_BRACE",
+    "MAIN": {
+        "$": [],
+        "def": ["FLIST"],
+        "id": ["STMT"],
+        "{": ["STMT"],
+        "int": ["STMT"],
+        ";": ["STMT"],
+        "print": ["STMT"],
+        "return": ["STMT"],
+        "if": ["STMT"],
     },
-    # Parâmetros
-    "parlist": {
-        "T_INT": "parlist → T_INT T_IDENT parlist_tail",
-        "T_CLOSE_PAREN": "parlist → ε",
+    "FLIST": {
+        "def": ["FDEF", "FLIST'"],
     },
-    "parlist_tail": {
-        "T_COMMA": "parlist_tail → T_COMMA T_INT T_IDENT parlist_tail",
-        "T_CLOSE_PAREN": "parlist_tail → ε",
+    "FLIST'": {
+        "$": [],
+        "def": ["FLIST"],
     },
-    # Declarações
-    "stmtlist": {
-        "T_INT": "stmtlist → stmt stmtlist",
-        "T_RETURN": "stmtlist → stmt stmtlist",
-        "T_IDENT": "stmtlist → stmt stmtlist",
-        "T_PRINT": "stmtlist → stmt stmtlist",
-        "T_CLOSE_BRACE": "stmtlist → ε",
+    "FDEF": {
+        "def": ["def", "id", "(", "PARLIST", ")", "{", "STMTLIST", "}"],
     },
-    "stmt": {
-        "T_INT": "stmt → T_INT T_IDENT T_SEMICOLON",
-        "T_IDENT": "stmt → T_IDENT T_EQUALS_SIGN expr T_SEMICOLON",
-        "T_PRINT": "stmt → T_PRINT expr T_SEMICOLON",
-        "T_RETURN": "stmt → T_RETURN expr T_SEMICOLON",
+    "PARLIST": {
+        ")": [],
+        "int": ["int", "id", "PARLIST'"],
     },
-    # Expressões
-    "expr": {
-        "T_IDENT": "expr → T_IDENT expr_tail",
-        "INT_LITERAL": "expr → term expr_tail",
+    "PARLIST'": {
+        ")": [],
+        ",": [",", "PARLIST"],
     },
-    "expr_tail": {
-        "T_PLUS_SIGN": "expr_tail → T_PLUS_SIGN term expr_tail",
-        "T_MINUS_SIGN": "expr_tail → T_MINUS_SIGN term expr_tail",
-        "T_SEMICOLON": "expr_tail → ε",
+    "VARLIST": {
+        "id": ["id", "VARLIST'"],
     },
-    # Termos e fatores
-    "term": {
-        "T_IDENT": "term → factor term_tail",
-        "INT_LITERAL": "term → factor term_tail",
+    "VARLIST'": {
+        ",": [",", "VARLIST"],
+        ";": [],
     },
-    "term_tail": {
-        "T_ASTERISK_SIGN": "term_tail → T_ASTERISK_SIGN factor term_tail",
-        "T_SLASH_SIGN": "term_tail → T_SLASH_SIGN factor term_tail",
-        "T_PLUS_SIGN": "term_tail → ε",
-        "T_MINUS_SIGN": "term_tail → ε",
-        "T_SEMICOLON": "term_tail → ε",
+    "STMT": {
+        "id": ["ATRIBST", ";"],
+        "{": ["{", "STMTLIST", "}"],
+        "int": ["int", "VARLIST", ";"],
+        ";": [";"],
+        "print": ["PRINTST", ";"],
+        "return": ["RETURNST", ";"],
+        "if": ["IFSTMT"],
     },
-    "factor": {
-        "T_IDENT": "factor → T_IDENT",
-        "INT_LITERAL": "factor → INT_LITERAL",
+    "ATRIBST": {
+        "id": ["id", ":=", "ATRIBST'"],
+    },
+    "ATRIBST'": {
+        "id": ["id", "AATRIBST'"],
+        "(": ["(", "NUMEXPR", ")", "TERM'", "NUMEXPR'", "EXPR'"],
+        "num": ["num", "TERM'", "NUMEXPR'", "EXPR'"],
+    },
+    "AATRIBST'": {
+        "(": ["(", "PARLISTCALL", ")"],
+        "+": ["TERM'", "NUMEXPR'", "EXPR'"],
+        "-": ["TERM'", "NUMEXPR'", "EXPR'"],
+        "*": ["TERM'", "NUMEXPR'", "EXPR'"],
+        "/": ["TERM'", "NUMEXPR'", "EXPR'"],
+        "<": ["TERM'", "NUMEXPR'", "EXPR'"],
+        "<=": ["TERM'", "NUMEXPR'", "EXPR'"],
+        ">": ["TERM'", "NUMEXPR'", "EXPR'"],
+        ">=": ["TERM'", "NUMEXPR'", "EXPR'"],
+        "==": ["TERM'", "NUMEXPR'", "EXPR'"],
+        "<>": ["TERM'", "NUMEXPR'", "EXPR'"],
+    },
+    "PRINTST": {
+        "print": ["print", "EXPR"],
+    },
+    "RETURNST": {
+        "return": ["return", "RETURNST'"],
+    },
+    "RETURNST'": {
+        "id": ["id"],
+        ";": [],
+    },
+    "IFSTMT": {
+        "if": ["if", "(", "EXPR", ")", "STMT", "IFSTMT''"],
+    },
+    "IFSTMT'": {
+        "else": ["else", "STMT"],
+    },
+    "STMTLIST": {
+        "id": ["STMT", "STMTLIST'"],
+        "{": ["STMT", "STMTLIST'"],
+        "int": ["STMT", "STMTLIST'"],
+        ";": ["STMT", "STMTLIST'"],
+        "print": ["STMT", "STMTLIST'"],
+        "return": ["STMT", "STMTLIST'"],
+        "if": ["STMT", "STMTLIST'"],
+    },
+    "STMTLIST'": {
+        "id": ["STMT", "STMTLIST'"],
+        "{": ["STMT", "STMTLIST'"],
+        "int": ["STMT", "STMTLIST'"],
+        ";": ["STMT", "STMTLIST'"],
+        "print": ["STMT", "STMTLIST'"],
+        "return": ["STMT", "STMTLIST'"],
+        "if": ["STMT", "STMTLIST'"],
+        "}": [],
+    },
+    "EXPR": {
+        "id": ["NUMEXPR", "EXPR'"],
+        "(": ["NUMEXPR", "EXPR'"],
+        "num": ["NUMEXPR", "EXPR'"],
+    },
+    "EXPR'": {
+        ")": [],
+        ";": [],
+        "<": ["<", "NUMEXPR"],
+        "<=": ["<=", "NUMEXPR"],
+        ">": [">", "NUMEXPR"],
+        ">=": [">=", "NUMEXPR"],
+        "==": ["==", "NUMEXPR"],
+        "<>": ["<>", "NUMEXPR"],
+    },
+    "NUMEXPR": {
+        "id": ["TERM", "NUMEXPR'"],
+        "(": ["TERM", "NUMEXPR'"],
+        "num": ["TERM", "NUMEXPR'"],
+    },
+    "NUMEXPR'": {
+        ")": [],
+        ";": [],
+        "+": ["+", "TERM", "NUMEXPR'"],
+        "-": ["-", "TERM", "NUMEXPR'"],
+    },
+    "TERM": {
+        "id": ["FACTOR", "TERM'"],
+        "(": ["FACTOR", "TERM'"],
+        "num": ["FACTOR", "TERM'"],
+    },
+    "TERM'": {
+        ")": [],
+        ";": [],
+        "+": [],
+        "-": [],
+        "*": ["*", "FACTOR", "TERM'"],
+        "/": ["/", "FACTOR", "TERM'"],
+    },
+    "FACTOR": {
+        "id": ["id"],
+        "(": ["(", "NUMEXPR", ")"],
+        "num": ["num"],
     },
 }
+
 
 # Algoritmo de Parsing
 # current_token = a // top = X
 def predictive_parser(tokens, table, start_symbol):
+    tokens.append("$")
     stack = ["$", start_symbol]  # Pilha começa com $ e o símbolo inicial
     productions_used = []  # Armazena as produções usadas
 
@@ -79,10 +183,10 @@ def predictive_parser(tokens, table, start_symbol):
         elif top not in table:
             print(f"Error: Unexpected terminal '{top}'")  # Era terminal, mas não era o do input
             return False
-        elif not table[top][current_token]: ## se a produção não existe para aquele não terminal x terminal, não tem como prosseguir
+        elif current_token not in table[top]: ## se a produção não existe para aquele não terminal x terminal, não tem como prosseguir
             print(f"Error: Unexpected token '{current_token}' for non-terminal '{top}'")
             return False
-        elif table[top][current_token]:  # se está em table, é Não-terminal
+        elif table[top]:  # se está em table, é Não-terminal
             production = table[top][current_token]
             print(f"Using production: {production}")
             productions_used.append(production)
@@ -90,10 +194,8 @@ def predictive_parser(tokens, table, start_symbol):
             # Desempilha e empilha a produção
             stack.pop()
 
-            _, rhs = production.split("→")
-            symbols = rhs.strip().split()
-            if symbols != ["ε"]:  # caso produza episilon não empilha
-                stack.extend(reversed(symbols))  # Empilha os símbolos da produção
+            if production:  # caso produza episilon não empilha
+                stack.extend(reversed(production))  # Empilha os símbolos da produção
         top = stack[-1] ## Atualiza X e repete
 
 
@@ -102,25 +204,17 @@ def predictive_parser(tokens, table, start_symbol):
 
     # return True if index == len(tokens) else False
 
-# Exemplo de tokens de entrada
-tokens = [
-    "T_FUNCDEF", "T_IDENT", "T_OPEN_PAREN", "T_INT", "T_IDENT", "T_COMMA", "T_INT", "T_IDENT", "T_CLOSE_PAREN",
-    "T_OPEN_BRACE", "T_INT", "T_IDENT", "T_COMMA", "T_IDENT", "T_SEMICOLON",
-    "T_IDENT", "T_EQUALS_SIGN", "T_IDENT", "T_PLUS_SIGN", "T_IDENT", "T_SEMICOLON",
-    "T_IDENT", "T_EQUALS_SIGN", "T_IDENT", "T_PLUS_SIGN", "T_IDENT", "T_ASTERISK_SIGN", "T_IDENT", "T_SEMICOLON",
-    "T_RETURN", "T_IDENT", "T_SEMICOLON", "T_CLOSE_BRACE",
-    "T_FUNCDEF", "T_IDENT", "T_OPEN_PAREN", "T_CLOSE_PAREN",
-    "T_OPEN_BRACE", "T_INT", "T_IDENT", "T_COMMA", "T_IDENT", "T_COMMA", "T_IDENT", "T_SEMICOLON",
-    "T_IDENT", "T_EQUALS_SIGN", "INT_LITERAL", "T_SEMICOLON",
-    "T_IDENT", "T_EQUALS_SIGN", "INT_LITERAL", "T_SEMICOLON",
-    "T_IDENT", "T_EQUALS_SIGN", "T_IDENT", "T_OPEN_PAREN", "T_IDENT", "T_COMMA", "T_IDENT", "T_CLOSE_PAREN", "T_SEMICOLON",
-    "T_PRINT", "T_IDENT", "T_SEMICOLON",
-    "T_RETURN", "T_SEMICOLON", "T_CLOSE_BRACE", "$"
-]
-
 # Executa o analisador
-result = predictive_parser(tokens, M, "S")
-if result:
-    print("Success! Program belongs to the language.")
-else:
-    print("Error! Program does not belong to the language.")
+if __name__ == "__main__":
+    # filename = input("Forneça o caminho para o arquivo com os tokens: ")
+    filename = os.path.expanduser("./entrada_correta.lsi")
+    filename = os.path.abspath(filename)
+    if not os.path.isfile(filename):
+        print(f"Arquivo '{filename}' não encontrado.")
+    else:
+        result = predictive_parser(lexer.get_tokens(filename), M, "S")
+        if result:
+            print("Success! Program belongs to the language.")
+        else:
+            print("Error! Program does not belong to the language.")
+
