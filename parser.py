@@ -2,7 +2,6 @@ import os
 
 import lexer_parte_b as lexer
 
-# Exemplo de tabela de análise sintática (simplificada para referência)
 M = {
     "S": {
         "$": ["MAIN", "$"],
@@ -167,12 +166,12 @@ M = {
 # current_token = a // top = X
 def predictive_parser(tokens, table, start_symbol):
     tokens.append("$")
-    stack = ["$", start_symbol]  # Pilha começa com $ e o símbolo inicial
-    productions_used = []  # Armazena as produções usadas
+    stack = ["$", start_symbol]  # pilha começa com $ e o símbolo inicial
+    productions_used = []  # armazena as producos usadas
 
-    index = 0  # Aponta para o próximo símbolo no buffer de entrada
-    current_token = tokens[0]  ## primeiro símbolo de w
-    top = stack[-1] ## símbolo no topo da pilha
+    index = 0  # aponta pro prox símbolo no buffer de entrada
+    current_token = tokens[0]  # primeiro símbolo de w
+    top = stack[-1] # simbolo no topo da pilha
 
     while current_token != "$":
         if top == current_token:  # "Match"
@@ -181,32 +180,29 @@ def predictive_parser(tokens, table, start_symbol):
             index += 1
             current_token = tokens[index]
         elif top not in table:
-            print(f"Error: Unexpected terminal '{top}'")  # Era terminal, mas não era o do input
+            print(f"Error: Unexpected terminal '{top}'")  # terminal, mas não era o do input
             return False
-        elif current_token not in table[top]: ## se a produção não existe para aquele não terminal x terminal, não tem como prosseguir
+        elif current_token not in table[top]: ##se a producao nao existe pro não terminal x terminal, nao tem como prosseguir
             print(f"Error: Unexpected token '{current_token}' for non-terminal '{top}'")
             return False
-        elif table[top]:  # se está em table, é Não-terminal
+        elif table[top]:  # se está em table, é nao terminal
             production = table[top][current_token]
             print(f"Using production: {production}")
             productions_used.append(production)
 
-            # Desempilha e empilha a produção
+            # deequeue e enqueue a produção
             stack.pop()
 
             if production:  # caso produza episilon não empilha
-                stack.extend(reversed(production))  # Empilha os símbolos da produção
-        top = stack[-1] ## Atualiza X e repete
+                stack.extend(reversed(production))  # empilha os simbolos da producao
+        top = stack[-1] # atualiza X e repete
 
 
     print("Parsing completed successfully!")
     return True
 
-    # return True if index == len(tokens) else False
-
-# Executa o analisador
 if __name__ == "__main__":
-    # filename = input("Forneça o caminho para o arquivo com os tokens: ")
+    # filename = input("forneça o caminho para o arquivo com os tokens: ")
     filename = os.path.expanduser("./entrada_correta.lsi")
     filename = os.path.abspath(filename)
     if not os.path.isfile(filename):

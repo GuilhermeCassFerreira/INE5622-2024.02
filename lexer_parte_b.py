@@ -117,7 +117,7 @@ def get_tokens(file_path):
         tok = lexer.token()
         if not tok:
             break
-        if tok.type == 'ID' or tok.type =='NUM':  # Verifica se o token é do tipo ID TODO melhorar esse if else para tratar no lexer antes
+        if tok.type == 'ID' or tok.type =='NUM':  # Verifica se o token é do tipo ID TODO melhorar esse if else para tratar no lexer antes?
             tokens_list.append(str(tok.type).lower())  # Adiciona 'id' como tipo padrão
         else:
             tokens_list.append(tok.value)  # Adiciona o valor do token diretamente
