@@ -33,7 +33,7 @@ M = {
         "def": ["FLIST"],
     },
     "FDEF": {
-        "def": ["def", "id", "(", "PARLIST", ")", "{", "STMTLIST", "}"],
+        "def": ["def", "id(", "PARLIST", ")", "{", "STMTLIST", "}"],
     },
     "PARLIST": {
         ")": [],
@@ -63,12 +63,13 @@ M = {
         "id": ["id", ":=", "ATRIBST'"],
     },
     "ATRIBST'": {
-        "id": ["FCALL"],
+        "id(": ["FCALL"],
+        "id": ["EXPR"],
         "(": ["EXPR"],
         "num": ["EXPR"],
     },
     "FCALL": {
-        "id": ["id", "(", "PARLISTCALL", ")"],
+        "id(": ["id(", "PARLISTCALL", ")"],
     },
     "PARLISTCALL": {
         ")": [],
@@ -145,6 +146,12 @@ M = {
     "NUMEXPR'": {
         ")": [],
         ";": [],
+        "<": [],
+        "<=": [],
+        ">": [],
+        ">=": [],
+        "==": [],
+        "<>": [],
         "+": ["+", "TERM", "NUMEXPR'"],
         "-": ["-", "TERM", "NUMEXPR'"],
     },
@@ -153,7 +160,7 @@ M = {
         "(": ["FACTOR", "TERM'"],
         "num": ["FACTOR", "TERM'"],
     },
-    "TERM'": {
+    "TERM'": {#todo TA ERRADO AQUI FALTANDO COISA
         ")": [],
         ";": [],
         "+": [],
@@ -215,7 +222,9 @@ if __name__ == "__main__":
     if not os.path.isfile(filename):
         print(f"Arquivo '{filename}' não encontrado.")
     else:
-        result = predictive_parser(lexer.get_tokens(filename), M, "S")
+        tokens = lexer.get_tokens(filename)
+        print(tokens)
+        result = predictive_parser(tokens, M, "S")
         if result:
             print("Success! Program belongs to the language.")
         else:
