@@ -4,6 +4,7 @@ import ply.lex as lex
 import sys
 import os
 
+##TODO adicionar token 'id('
 # Lista de tokens
 tokens = [
     'ID', 'NUM', 'PLUS', 'MINUS', 'TIMES', 'DIVIDE', 'ASSIGN',
