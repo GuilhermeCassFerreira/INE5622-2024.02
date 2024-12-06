@@ -63,22 +63,20 @@ M = {
         "id": ["id", ":=", "ATRIBST'"],
     },
     "ATRIBST'": {
-        "id": ["id", "AATRIBST'"],
-        "(": ["(", "NUMEXPR", ")", "TERM'", "NUMEXPR'", "EXPR'"],
-        "num": ["num", "TERM'", "NUMEXPR'", "EXPR'"],
+        "id": ["FCALL"],
+        "(": ["EXPR"],
+        "num": ["EXPR"],
     },
-    "AATRIBST'": {
-        "(": ["(", "PARLISTCALL", ")"],
-        "+": ["TERM'", "NUMEXPR'", "EXPR'"],
-        "-": ["TERM'", "NUMEXPR'", "EXPR'"],
-        "*": ["TERM'", "NUMEXPR'", "EXPR'"],
-        "/": ["TERM'", "NUMEXPR'", "EXPR'"],
-        "<": ["TERM'", "NUMEXPR'", "EXPR'"],
-        "<=": ["TERM'", "NUMEXPR'", "EXPR'"],
-        ">": ["TERM'", "NUMEXPR'", "EXPR'"],
-        ">=": ["TERM'", "NUMEXPR'", "EXPR'"],
-        "==": ["TERM'", "NUMEXPR'", "EXPR'"],
-        "<>": ["TERM'", "NUMEXPR'", "EXPR'"],
+    "FCALL": {
+        "id": ["id", "(", "PARLISTCALL", ")"],
+    },
+    "PARLISTCALL": {
+        ")": [],
+        "id": ["id", "PARLISTCALL'"],
+    },
+    "PARLISTCALL'": {
+        ")": [],
+        ",": [",", "PARLISTCALL"],
     },
     "PRINTST": {
         "print": ["print", "EXPR"],
@@ -91,10 +89,19 @@ M = {
         ";": [],
     },
     "IFSTMT": {
-        "if": ["if", "(", "EXPR", ")", "STMT", "IFSTMT''"],
+        "if": ["if", "(", "EXPR", ")", "STMT", "IFSTMT'"],
     },
     "IFSTMT'": {
         "else": ["else", "STMT"],
+        "$": [],
+        "def": [],
+        "id": [],
+        "}": [],
+        "int": [],
+        ";": [],
+        "print": [],
+        "return": [],
+        "if": [],
     },
     "STMTLIST": {
         "id": ["STMT", "STMTLIST'"],
