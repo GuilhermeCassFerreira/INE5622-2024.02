@@ -10,7 +10,7 @@ tokens = [
     'ID', 'NUM', 'PLUS', 'MINUS', 'TIMES', 'DIVIDE', 'ASSIGN',
     'LT', 'GT', 'LE', 'GE', 'EQ', 'NE', 'LPAREN', 'RPAREN',
     'LBRACE', 'RBRACE', 'SEMI', 'COMMA', 'DEF', 'IF', 'ELSE',
-    'PRINT', 'RETURN', 'INT'
+    'PRINT', 'RETURN', 'INT', 'ID_F'
 ]
 
 # Regras regulares para tokens simples
@@ -65,11 +65,18 @@ def t_INT(t):
     r'int'
     return t
 
+def t_ID_F(t):
+    r'[a-zA-Z_][a-zA-Z_0-9]*\('
+    t.value = t.value[:-1]  # Remove o parêntese da string do valor
+    return t
+
 # Regra para identificadores (variáveis e funções)
 def t_ID(t):
     r'[a-zA-Z_][a-zA-Z_0-9]*'
     t.type = reserved.get(t.value, 'ID')
     return t
+
+
 
 # Regra para constantes numéricas
 def t_NUM(t):
@@ -118,6 +125,9 @@ def get_tokens(file_path):
         tok = lexer.token()
         if not tok:
             break
+        if tok.type == 'ID_F':  # Verifica se o token é do tipo ID_F ## TODO MELHORAR ISSO se der
+            tokens_list.append('id(')
+            continue# Adiciona 'id' como tipo padrão
         if tok.type == 'ID' or tok.type =='NUM':  # Verifica se o token é do tipo ID TODO melhorar esse if else para tratar no lexer antes?
             tokens_list.append(str(tok.type).lower())  # Adiciona 'id' como tipo padrão
         else:
@@ -133,4 +143,3 @@ if __name__ == "__main__":
         print(f"Arquivo '{filename}' não encontrado.")
     else:
         print(get_tokens(filename))
-

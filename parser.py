@@ -163,6 +163,11 @@ M = {
     "TERM'": {#todo TA ERRADO AQUI FALTANDO COISA
         ")": [],
         ";": [],
+        "<": [],
+        "<=": [],
+        ">=": [],
+        "==": [],
+        "<>": [],
         "+": [],
         "-": [],
         "*": ["*", "FACTOR", "TERM'"],
@@ -201,7 +206,7 @@ def predictive_parser(tokens, table, start_symbol):
             return False
         elif table[top]:  # se está em table, é nao terminal
             production = table[top][current_token]
-            print(f"Using production: {production}")
+            print(f"Using production: {top} with {current_token} -> {production}")
             productions_used.append(production)
 
             # deequeue e enqueue a produção
