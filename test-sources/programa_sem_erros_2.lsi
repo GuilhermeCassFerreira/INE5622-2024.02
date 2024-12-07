@@ -1,0 +1,33 @@
+def fatorial(int N) {
+    int F;
+    if (N == 0) {
+        F := 1;
+    } else {
+        F := N * fatorial(N - 1);
+    }
+    return F;
+}
+
+def fibonacci(int N) {
+    int F;
+    if (N == 0) {
+        F := 0;
+    } else {
+        if (N == 1) {
+            F := 1;
+        } else {
+            F := fibonacci(N - 1) + fibonacci(N - 2);
+        }
+    }
+    return F;
+}
+
+def principal() {
+    int X, Y;
+    X := 5;
+    Y := fatorial(X);
+    print Y;
+    Y := fibonacci(X);
+    print Y;
+    return;
+}

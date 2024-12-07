@@ -1,0 +1,42 @@
+def soma(int A, int B) {
+    int C;
+    C := A + B;
+    return C;
+}
+
+def subtracao(int A, int B) {
+    int C;
+    C := A - B;
+    return C;
+}
+
+def multiplicacao(int A, int B) {
+    int C;
+    C := A * B;
+    return C;
+}
+
+def divisao(int A, int B) {
+    int C;
+    if (B <> 0) {
+        C := A / B;
+    } else {
+        C := 0;
+    }
+    return C;
+}
+
+def principal() {
+    int X, Y, Z;
+    X := 10
+    Y := 5;
+    Z := soma(X, Y);
+    print Z;
+    Z := subtracao(X, Y);
+    print Z;
+    Z := multiplicacao(X, Y);
+    print Z;
+    Z := divisao(X, Y);
+    print Z;
+    return;
+}
