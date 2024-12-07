@@ -222,7 +222,7 @@ def predictive_parser(tokens, table, start_symbol):
 
 if __name__ == "__main__":
     # filename = input("forneça o caminho para o arquivo com os tokens: ")
-    filename = os.path.expanduser("./entrada_correta.lsi")
+    filename = os.path.expanduser("./entrada_correta3.lsi")
     filename = os.path.abspath(filename)
     if not os.path.isfile(filename):
         print(f"Arquivo '{filename}' não encontrado.")
