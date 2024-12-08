@@ -1,5 +1,5 @@
 import os
-
+import sys
 import lexer_parte_b as lexer
 
 M = {
@@ -221,17 +221,22 @@ def predictive_parser(tokens, table, start_symbol):
     return True
 
 if __name__ == "__main__":
+    if len(sys.argv) > 1:
+        filename = sys.argv[1]
+    else:
+        filename = input("Forneça o caminho para o arquivo com os tokens: ")
     # filename = input("forneça o caminho para o arquivo com os tokens: ")
-    filename = os.path.expanduser("./entrada_correta3.lsi")
+    #filename = os.path.expanduser("./test-sources/programa_com_erros_1.lsi")
     filename = os.path.abspath(filename)
     if not os.path.isfile(filename):
         print(f"Arquivo '{filename}' não encontrado.")
+        sys.exit(1)
+
+    tokens = lexer.get_tokens(filename)
+    print(tokens)
+    result = predictive_parser(tokens, M, "S")
+    if result:
+        print("Success! Program belongs to the language.")
     else:
-        tokens = lexer.get_tokens(filename)
-        print(tokens)
-        result = predictive_parser(tokens, M, "S")
-        if result:
-            print("Success! Program belongs to the language.")
-        else:
-            print("Error! Program does not belong to the language.")
+        print("Error! Program does not belong to the language.")
 

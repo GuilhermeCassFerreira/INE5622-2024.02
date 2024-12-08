@@ -10,9 +10,9 @@ if [ ! -f "$parser_script" ]; then
     exit 1;
 fi
 
-for test_file in "$test_sources_dir"/*.lsi; 
+for test_file in "$test_sources_dir"/*.lsi;
 do
   printf "\n\n=========================================\n\n${GREEN}Executando arquivo de teste '$test_file'${NC}:\n"
-  grep '^\s*/\?\*' $test_file | tr -d '*/'  
-  python3 $parser_script < $test_file
+  grep '^\s*/\?\*' $test_file | tr -d '*/'
+  python3 $parser_script "$test_file"
 done
