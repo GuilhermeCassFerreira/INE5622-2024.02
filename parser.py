@@ -33,7 +33,7 @@ M = {
         "def": ["FLIST"],
     },
     "FDEF": {
-        "def": ["def", "id", "(", "PARLIST", ")", "{", "STMTLIST", "}"],
+        "def": ["def", "id(", "PARLIST", ")", "{", "STMTLIST", "}"],
     },
     "PARLIST": {
         ")": [],
@@ -63,22 +63,21 @@ M = {
         "id": ["id", ":=", "ATRIBST'"],
     },
     "ATRIBST'": {
-        "id": ["id", "AATRIBST'"],
-        "(": ["(", "NUMEXPR", ")", "TERM'", "NUMEXPR'", "EXPR'"],
-        "num": ["num", "TERM'", "NUMEXPR'", "EXPR'"],
+        "id(": ["FCALL"],
+        "id": ["EXPR"],
+        "(": ["EXPR"],
+        "num": ["EXPR"],
     },
-    "AATRIBST'": {
-        "(": ["(", "PARLISTCALL", ")"],
-        "+": ["TERM'", "NUMEXPR'", "EXPR'"],
-        "-": ["TERM'", "NUMEXPR'", "EXPR'"],
-        "*": ["TERM'", "NUMEXPR'", "EXPR'"],
-        "/": ["TERM'", "NUMEXPR'", "EXPR'"],
-        "<": ["TERM'", "NUMEXPR'", "EXPR'"],
-        "<=": ["TERM'", "NUMEXPR'", "EXPR'"],
-        ">": ["TERM'", "NUMEXPR'", "EXPR'"],
-        ">=": ["TERM'", "NUMEXPR'", "EXPR'"],
-        "==": ["TERM'", "NUMEXPR'", "EXPR'"],
-        "<>": ["TERM'", "NUMEXPR'", "EXPR'"],
+    "FCALL": {
+        "id(": ["id(", "PARLISTCALL", ")"],
+    },
+    "PARLISTCALL": {
+        ")": [],
+        "id": ["id", "PARLISTCALL'"],
+    },
+    "PARLISTCALL'": {
+        ")": [],
+        ",": [",", "PARLISTCALL"],
     },
     "PRINTST": {
         "print": ["print", "EXPR"],
@@ -91,10 +90,19 @@ M = {
         ";": [],
     },
     "IFSTMT": {
-        "if": ["if", "(", "EXPR", ")", "STMT", "IFSTMT''"],
+        "if": ["if", "(", "EXPR", ")", "STMT", "IFSTMT'"],
     },
     "IFSTMT'": {
         "else": ["else", "STMT"],
+        "$": [],
+        "def": [],
+        "id": [],
+        "}": [],
+        "int": [],
+        ";": [],
+        "print": [],
+        "return": [],
+        "if": [],
     },
     "STMTLIST": {
         "id": ["STMT", "STMTLIST'"],
@@ -138,6 +146,12 @@ M = {
     "NUMEXPR'": {
         ")": [],
         ";": [],
+        "<": [],
+        "<=": [],
+        ">": [],
+        ">=": [],
+        "==": [],
+        "<>": [],
         "+": ["+", "TERM", "NUMEXPR'"],
         "-": ["-", "TERM", "NUMEXPR'"],
     },
@@ -146,9 +160,14 @@ M = {
         "(": ["FACTOR", "TERM'"],
         "num": ["FACTOR", "TERM'"],
     },
-    "TERM'": {
+    "TERM'": {#todo TA ERRADO AQUI FALTANDO COISA
         ")": [],
         ";": [],
+        "<": [],
+        "<=": [],
+        ">=": [],
+        "==": [],
+        "<>": [],
         "+": [],
         "-": [],
         "*": ["*", "FACTOR", "TERM'"],
@@ -187,7 +206,7 @@ def predictive_parser(tokens, table, start_symbol):
             return False
         elif table[top]:  # se está em table, é nao terminal
             production = table[top][current_token]
-            print(f"Using production: {production}")
+            print(f"Using production: {top} with {current_token} -> {production}")
             productions_used.append(production)
 
             # deequeue e enqueue a produção
@@ -203,12 +222,14 @@ def predictive_parser(tokens, table, start_symbol):
 
 if __name__ == "__main__":
     # filename = input("forneça o caminho para o arquivo com os tokens: ")
-    filename = os.path.expanduser("./entrada_correta.lsi")
+    filename = os.path.expanduser("./entrada_correta3.lsi")
     filename = os.path.abspath(filename)
     if not os.path.isfile(filename):
         print(f"Arquivo '{filename}' não encontrado.")
     else:
-        result = predictive_parser(lexer.get_tokens(filename), M, "S")
+        tokens = lexer.get_tokens(filename)
+        print(tokens)
+        result = predictive_parser(tokens, M, "S")
         if result:
             print("Success! Program belongs to the language.")
         else:

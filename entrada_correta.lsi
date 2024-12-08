@@ -18,15 +18,15 @@ def principal() {
     return;
 }
 
-"TERM'": { ##TODO ta errado tem q ter tudo isso <	<=	>	>=	==	<>	+	-
-"NUMEXPR'": { ## TODO ta errado isso sepa tem q ter tudo isso <	<=	>	>=	==	<>	+	-
-"IFSTMT": {
-        "if": ["if", "(", "EXPR", ")", "STMT", "IFSTMT''"], #RETIRAR O aspas duplas do if
+#"TERM'": { ##TODO ta errado tem q ter tudo isso <	<=	>	>=	==	<>	+	-
+#"NUMEXPR'": { ## TODO ta errado isso sepa tem q ter tudo isso <	<=	>	>=	==	<>	+	-
+#"IFSTMT": {
+ #       "if": ["if", "(", "EXPR", ")", "STMT", "IFSTMT''"], #RETIRAR O aspas duplas do if
 
-"FDEF": {
-        "def": ["def", "id", "(", "PARLIST", ")", "{", "STMTLIST", "}"], #TODO maybe error is here id(
-    },
+#"FDEF": {
+ #       "def": ["def", "id", "(", "PARLIST", ")", "{", "STMTLIST", "}"], #TODO maybe error is here id(
+  #  },
 
-    "FCALL": {
-        "id": ["id(", "PARLISTCALL", ")"] # TODO id( aq sepa, acho que corrigi
-    },
+   # "FCALL": {
+    #    "id": ["id(", "PARLISTCALL", ")"] # TODO id( aq sepa, acho que corrigi
+    #},
