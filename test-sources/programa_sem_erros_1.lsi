@@ -1,0 +1,32 @@
+def func1(int A, int B) {
+    int C, D, R;
+    C := A + B;
+    D := A + B * C;
+    #R := C - D;
+    return R;
+}
+
+def principal() {
+    int X, Y, R;
+    X := 4;
+    Y := 5;
+    if (X < Y) {
+        return X;
+    }
+    R := func1(X, Y);
+    print R;
+    return;
+}
+
+#"TERM'": { ##TODO ta errado tem q ter tudo isso <	<=	>	>=	==	<>	+	-
+#"NUMEXPR'": { ## TODO ta errado isso sepa tem q ter tudo isso <	<=	>	>=	==	<>	+	-
+#"IFSTMT": {
+ #       "if": ["if", "(", "EXPR", ")", "STMT", "IFSTMT''"], #RETIRAR O aspas duplas do if
+
+#"FDEF": {
+ #       "def": ["def", "id", "(", "PARLIST", ")", "{", "STMTLIST", "}"], #TODO maybe error is here id(
+  #  },
+
+   # "FCALL": {
+    #    "id": ["id(", "PARLISTCALL", ")"] # TODO id( aq sepa, acho que corrigi
+    #},

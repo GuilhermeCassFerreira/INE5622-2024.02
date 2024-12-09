@@ -136,7 +136,7 @@ def get_tokens(file_path):
 
 if __name__ == "__main__":
     # filename = input("Forneça o caminho para o arquivo com os tokens: ")
-    filename = "./entrada_correta2.lsi"
+    filename = "~/INE5622-2024.02/test-sources/programa_sem_erros_2.lsi"
     filename = os.path.expanduser(filename)
     filename = os.path.abspath(filename)
     if not os.path.isfile(filename):
