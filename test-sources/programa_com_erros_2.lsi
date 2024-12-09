@@ -22,7 +22,8 @@ def divisao(int A, int B) {
         C := A / B;
     } else {
         C := 0;
-    return C;
+    }
+    return C;  # Erro Sintático: Falta uma chave de fechamento aqui
 
 def principal() {
     int X, Y, Z;

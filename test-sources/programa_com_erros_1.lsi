@@ -1,52 +1,95 @@
-def funcSub(int A, int B) {
-    int Diff;
-    Diff := A - B;
-    return Diff;; # Dois pontos e vírgula
+def soma(int A, int B) {
+    int C;
+    C := A + B;
+    return C;
 }
 
-def funcDiv(int A, int B)) { # ")" sem sua respectiva "("
-    int Quotient;
-    if (B != 0) {
-        Quotient := A / B;
+def subtracao(int A, int B) {
+    int C;
+    C := A - B;
+    return C;
+}
+
+def multiplicacao(int A, int B) {
+    int C;
+    C := A * B;
+    return C;
+}
+
+def divisao(int A, int B) {
+    int C;
+    if (B <> 0) {
+        C := A / B;
     } else {
-        Quotient := 0;  # Evita divisão por zero
+        C := 0;
     }
-    return Quotient;
+    return C;
 }
 
 def principal() {
-    int X, Y, R;
+    int X, Y, Z;
     X := 10;
-    Y := 3;
-
-    # Chamadas de função e aritmética
-    R := funcSub(X, Y);  # R = 7 (10 - 3)
-    R := R + 2;          # R = 9
-    R := R * Y;          # R = 27 (9 * 3)
-
-    # Condicional simples com retorno sem valor
+    Y := 5;
+    Z := soma(X, Y);
+    print Z;
+    Z := subtracao(X, Y);
+    print Z;
+    Z := multiplicacao(X, Y);
+    print Z;
+    Z := divisao(X, Y);
+    print Z;
     if (X > Y) {
-        print X;         # imprime 10
-        return;          # retorna sem valor
+        print X;
+    } else {
+        print Y;
     }
-
-    # Se chegar aqui, significa que X <= Y
-    if (X == Y) {
-        print R;
-    }
-    else {
-        R := funcDiv(X, Y);  # caso X != Y e X <= Y, R será X / Y
-        print R;
-    }
-
-    # Outro teste condicional com operador !=
-    if (X !!= Y) {
-        Temp := funcMod(X, Y);  # Erro: funcMod não está definida
-        print Temp;       # resultado da função funcMod
-    }
-
-    # Impressão final
-    print R;
 
     return;
+}
+
+def erroSintatico() {
+    int A, B;
+    A := 10;
+    B := 20;
+    if (A == B) {
+        print A;
+    } else {
+        print B;
+    }
+    return;
+}
+
+def outraFuncao(int A, int B) {
+    int C;
+    C := A + B;
+    if (C > 0) {
+        print C;
+    } else {
+        print -C;
+    }
+    return C;
+}
+
+def maisErros(int A, int B) {
+    int C;
+    C := A + B;
+    if (C == 0) {
+        print "Zero";
+    } else {
+        print "Non-zero";
+    }
+    return C;
+}
+
+def aindaMaisErros() {
+    int A, B, C;
+    A := 1;
+    B := 2;
+    C := A + B;
+    if (C > 0) {
+        print C;
+    } else {
+        print -C;
+    }
+    return C;
 }
