@@ -1,3 +1,5 @@
+# Bruno Vazquez Lafaiete (20102277), Guilherme Cassiano Ferreira Silva (23250871), Victor Luiz de Souza (21105576)
+
 import os
 import sys
 import lexer_parte_b as lexer
@@ -160,7 +162,7 @@ M = {
         "(": ["FACTOR", "TERM'"],
         "num": ["FACTOR", "TERM'"],
     },
-    "TERM'": {#todo TA ERRADO AQUI FALTANDO COISA
+    "TERM'": {
         ")": [],
         ";": [],
         "<": [],
@@ -226,7 +228,7 @@ if __name__ == "__main__":
     else:
         filename = input("Forneça o caminho para o arquivo com os tokens: ")
     # filename = input("forneça o caminho para o arquivo com os tokens: ")
-    #filename = os.path.expanduser("./test-sources/programa_com_erros_1.lsi")
+    filename = os.path.expanduser("./test-sources/programa_sem_erros_2.lsi")
     filename = os.path.abspath(filename)
     if not os.path.isfile(filename):
         print(f"Arquivo '{filename}' não encontrado.")

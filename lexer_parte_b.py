@@ -1,10 +1,9 @@
 # Bruno Vazquez Lafaiete (20102277), Guilherme Cassiano Ferreira Silva (23250871), Victor Luiz de Souza (21105576)
 
-import ply.lex as lex
 import sys
 import os
+import ply.lex as lex
 
-##TODO adicionar token 'id('
 # Lista de tokens
 tokens = [
     'ID', 'NUM', 'PLUS', 'MINUS', 'TIMES', 'DIVIDE', 'ASSIGN',
@@ -40,6 +39,7 @@ reserved = {
     'return': 'RETURN',
     'int': 'INT',
 }
+
 # Regras para palavras-chave
 def t_DEF(t):
     r'def'
@@ -67,7 +67,8 @@ def t_INT(t):
 
 def t_ID_F(t):
     r'[a-zA-Z_][a-zA-Z_0-9]*\('
-    t.value = t.value[:-1]  # Remove o parêntese da string do valor
+    t.type = 'ID_F'
+    t.value = 'id('
     return t
 
 # Regra para identificadores (variáveis e funções)
@@ -75,8 +76,6 @@ def t_ID(t):
     r'[a-zA-Z_][a-zA-Z_0-9]*'
     t.type = reserved.get(t.value, 'ID')
     return t
-
-
 
 # Regra para constantes numéricas
 def t_NUM(t):
@@ -125,18 +124,18 @@ def get_tokens(file_path):
         tok = lexer.token()
         if not tok:
             break
-        if tok.type == 'ID_F':  # Verifica se o token é do tipo ID_F ## TODO MELHORAR ISSO se der
+        if tok.type == 'ID_F':
             tokens_list.append('id(')
-            continue# Adiciona 'id' como tipo padrão
-        if tok.type == 'ID' or tok.type =='NUM':  # Verifica se o token é do tipo ID TODO melhorar esse if else para tratar no lexer antes?
-            tokens_list.append(str(tok.type).lower())  # Adiciona 'id' como tipo padrão
+        elif tok.type == 'ID':
+            tokens_list.append('id')
+        elif tok.type == 'NUM':
+            tokens_list.append('num')
         else:
-            tokens_list.append(tok.value)  # Adiciona o valor do token diretamente
+            tokens_list.append(tok.value.lower() if isinstance(tok.value, str) else tok.value)
     return tokens_list
 
 if __name__ == "__main__":
-    # filename = input("Forneça o caminho para o arquivo com os tokens: ")
-    filename = "./entrada_correta2.lsi"
+    filename = "./test-sources/programa_sem_erros_2.lsi"
     filename = os.path.expanduser(filename)
     filename = os.path.abspath(filename)
     if not os.path.isfile(filename):
