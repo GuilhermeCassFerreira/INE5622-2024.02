@@ -1,71 +1,11 @@
-def soma(int A, int B) {
-    int C;
-    C := A + B;
-    return C;
-}
-
-def subtracao(int A, int B) {
-    int C;
-    C := A - B;
-    return C;
-}
-
-def multiplicacao(int A, int B) {
-    int C;
-    C := A * B;
-    return C;
-}
-
-def divisao(int A, int B) {
-    int C;
-    if (B <> 0) {
-        C := A / B;
-    } else {
-        C := 0;
-    }
-    return C;
-}
-
-def principal() {
-    int X, Y, Z;
-    X := 10;
-    Y := 5;
-    Z := soma(X, Y);
-    print Z;
-    Z := subtracao(X, Y);
-    print Z;
-    Z := multiplicacao(X, Y);
-    print Z;
-    Z := divisao(X, Y);
-    print Z;
-    if (X > Y) {
-        print X;
-    } else {
-        print Y;
-    }
-
-    return;
-}
-
-def erroSintatico() {
-    int A, B;
-    A := 10;
-    B := 20;
-    if (A == B) {
-        print A;
-    } else {
-        print B;
-    }
-    return;
-}
-
 def outraFuncao(int A, int B) {
     int C;
     C := A + B;
-    if (C > 0) {
+    D := A * B;
+    if (C == D) {
         print C;
     } else {
-        print -C;
+        print C;
     }
     return C;
 }
@@ -76,8 +16,8 @@ def maisErros(int A, int B) {
     if (C == 0) {
         print "Zero";
     } else {
-        print "Non-zero";
-    }
+        print "NonZero";
+     # } Chave comentada(vai gerar um erro)
     return C;
 }
 
@@ -86,10 +26,10 @@ def aindaMaisErros() {
     A := 1;
     B := 2;
     C := A + B;
-    if (C > 0) {
+    if (C == A) {
         print C;
     } else {
-        print -C;
+        print C;
     }
     return C;
 }

@@ -1,3 +1,5 @@
+# Bruno Vazquez Lafaiete (20102277), Guilherme Cassiano Ferreira Silva (23250871), Victor Luiz de Souza (21105576)
+
 import os
 
 import lexer_parte_b as lexer
@@ -160,7 +162,7 @@ M = {
         "(": ["FACTOR", "TERM'"],
         "num": ["FACTOR", "TERM'"],
     },
-    "TERM'": {#todo TA ERRADO AQUI FALTANDO COISA
+    "TERM'": {
         ")": [],
         ";": [],
         "<": [],
@@ -222,7 +224,7 @@ def predictive_parser(tokens, table, start_symbol):
 
 if __name__ == "__main__":
     # filename = input("forneça o caminho para o arquivo com os tokens: ")
-    filename = os.path.expanduser("~/INE5622-2024.02/test-sources/programa_sem_erros_2.lsi")
+    filename = os.path.expanduser("./test-sources/programa_sem_erros_2.lsi")
     filename = os.path.abspath(filename)
     if not os.path.isfile(filename):
         print(f"Arquivo '{filename}' não encontrado.")

@@ -1,5 +1,3 @@
-# INE5622-2024.02
-
 ### Trabalho final da disciplina de Introdução a Compiladores
 
 Analisador Léxico + Analisador Sintático implementados em Python.
@@ -124,6 +122,17 @@ python3 run_parser.py
 O script exibirá uma lista de arquivos no diretório `~/INE5622-2024.02/test-sources` e permitirá que você selecione um deles para ser analisado pelo parser.
 
 ---
+
+## Detalhes Adicionais sobre o Trabalho
+
+Este projeto foi desenvolvido como parte do trabalho final da disciplina de Introdução a Compiladores. O objetivo principal é implementar um analisador léxico e um analisador sintático para uma linguagem de programação simples. O projeto é dividido em três componentes principais:
+
+1. **Analisador Léxico**: Responsável por converter o código-fonte em uma sequência de tokens. Implementado no arquivo `lexer_parte_b.py` usando a biblioteca PLY.
+
+2. **Analisador Sintático**: Responsável por analisar a sequência de tokens e verificar se a estrutura do código-fonte está de acordo com a gramática definida. Implementado no arquivo `parser.py` como um parser preditivo guiado por tabela.
+
+3. **Script Principal**: Integra o analisador léxico e o analisador sintático, permitindo a análise de arquivos de entrada selecionados pelo usuário. Implementado no arquivo `run_parser.py`.
+
 ---
 
 ## Integrantes do Grupo

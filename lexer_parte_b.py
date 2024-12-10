@@ -1,3 +1,5 @@
+# Bruno Vazquez Lafaiete (20102277), Guilherme Cassiano Ferreira Silva (23250871), Victor Luiz de Souza (21105576)
+
 import sys
 import os
 import ply.lex as lex
@@ -133,7 +135,7 @@ def get_tokens(file_path):
     return tokens_list
 
 if __name__ == "__main__":
-    filename = "~/INE5622-2024.02/test-sources/programa_sem_erros_2.lsi"
+    filename = "./test-sources/programa_sem_erros_2.lsi"
     filename = os.path.expanduser(filename)
     filename = os.path.abspath(filename)
     if not os.path.isfile(filename):

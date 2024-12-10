@@ -1,3 +1,5 @@
+# Bruno Vazquez Lafaiete (20102277), Guilherme Cassiano Ferreira Silva (23250871), Victor Luiz de Souza (21105576)
+
 import os
 import lexer_parte_b as lexer
 from parser import predictive_parser, M
@@ -18,7 +20,7 @@ def selecionar_arquivo(arquivos):
         return None
 
 def main():
-    diretorio = os.path.expanduser("~/INE5622-2024.02/test-sources")  # Caminho relativo ao diretório home do usuário
+    diretorio = os.path.expanduser("./test-sources")  # Caminho relativo ao diretório home do usuário
     arquivos = listar_arquivos(diretorio)
     if not arquivos:
         print("Nenhum arquivo encontrado no diretório.")
